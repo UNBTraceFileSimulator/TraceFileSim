@@ -424,9 +424,16 @@ int MemoryManager::setPointer(int thread, int parentID, int parentSlot,
 				parentID, parentSlot, childID);
 	}
 	Object* parent = myObjectContainers[GENERATIONS - 1]->getByID(parentID);
-	Object* child = myObjectContainers[GENERATIONS - 1]->getByID(childID);
+
+	//id 0 represents the NULL object.
+	Object* child = NULL;
+	int childGeneration = -1;
+	if(childID != 0){
+		child = myObjectContainers[GENERATIONS - 1]->getByID(childID);
+		childGeneration = child->getGeneration();
+	}
 	int parentGeneration = parent->getGeneration();
-	int childGeneration = child->getGeneration();
+
 
 	//check old child, if it created remSet entries and delete them
 	Object* oldChild = parent->getReferenceTo(parentSlot);
@@ -449,7 +456,8 @@ int MemoryManager::setPointer(int thread, int parentID, int parentSlot,
 	}
 
 	parent->setPointer(parentSlot, child);
-	if (parentGeneration > childGeneration) {
+	//childID 0 would mean a NULL object, which does not need to be remembered
+	if (parentGeneration > childGeneration && childID != 0) {
 		int i;
 		for (i = childGeneration; i < parentGeneration; i++) {
 			myObjectContainers[i]->addToGenRoot(child);
