@@ -85,7 +85,11 @@ int Simulator::doNextStep(){
 			case '-':
 				deleteRoot(traceLine);
 				break;
-			case 'c': // for now we ignore the class option
+			case 'c':
+				allocateToClassObject(traceLine);
+				break;
+			case 'r':
+				readObject(traceLine);
 				break;
 			default:
 				//gLineInTrace++;
@@ -109,6 +113,28 @@ int Simulator::doNextStep(){
 	return 0;
 }
 
+void Simulator::allocateToClassObject(string line) {
+	int thread, id;
+	int pos, length;
+	int classID;
+
+	if (!myMemManager->hasClassTable())
+		return;
+
+	pos = line.find('T')+1;
+	length = line.find(' ',pos)-pos;
+	thread = atoi(line.substr(pos,length).c_str());
+
+	pos = line.find('O')+1;
+	length = line.find(' ',pos)-pos;
+	id = atoi(line.substr(pos,length).c_str());
+
+	pos = line.find('C')+1;
+	length = line.find('\n',pos)-pos;
+	classID = atoi(line.substr(pos,length).c_str());
+
+	myMemManager->addObjectToClass(thread, classID, id);
+}
 
 int Simulator::lastStepWorked(){
 	if(myLastStepWorked == 1){
@@ -117,6 +143,19 @@ int Simulator::lastStepWorked(){
 	return 0;
 }
 
+void Simulator::readObject(string line){
+	int thread, objectID;
+	int pos, length;
+	pos = line.find('T')+1;
+	length = line.find(' ',pos)-pos;
+	thread = atoi(line.substr(pos,length).c_str());
+
+	pos = line.find('O')+1;
+	length = line.find('\n',pos)-pos;
+	objectID = atoi(line.substr(pos,length).c_str());
+
+	myMemManager->hotnessRelation(thread, objectID);
+}
 
 void Simulator::allocateToRootset(string line){
 	int thread, id, size, refCount;

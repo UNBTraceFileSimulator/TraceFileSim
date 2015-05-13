@@ -37,6 +37,8 @@ private:
 	void referenceOperation(string line);
 	void deleteRoot(string line);
 	void addToRoot(string line);
+	void readObject(string line);
+	void allocateToClassObject(string line);
 
 	ifstream myTraceFile;
 	

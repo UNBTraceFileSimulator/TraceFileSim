@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 						"  --traversal x, -t x       uses x as the traversal algorithm (valid: breadthFirst depthFirst hotness, default: breadthFirst)\n" \
 						"  --allocator x, -a x       uses x as the allocator (valid: real, simulated, default: real)\n" \
 						);
-		exit(1);
+		//exit(1);
 	}
 
 	fprintf(stderr, "TraceFileSimulator v%s\n\n", VERSION);
@@ -79,7 +79,8 @@ int main(int argc, char *argv[]) {
 		gDetLog = fopen("detailed.log","w+");
 	}
 
-	char *filename    = argv[1];
+	char *filename    = "../../KoMaClass_read.trace";
+	//char *filename    = argv[1];
 	int heapSize      = setArgs(argc, argv, "--heapsize",  "-h");
 	int highWatermark = setArgs(argc, argv, "--watermark", "-w");
 	int traversal     = setArgs(argc, argv, "--traversal", "-t");

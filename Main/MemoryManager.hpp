@@ -57,6 +57,8 @@ public:
 	bool hasClassTable();
 	void forceGC();
 	void lastStats();
+	void hotnessRelation(int thread, int objectID);
+	void addObjectToClass(int thread, int classID, int objectID);
 
 private:
 	bool isAlreadyRoot(int thread, int id);
@@ -78,8 +80,12 @@ private:
 
 	Allocator* myAllocators[GENERATIONS];
 	ObjectContainer* myObjectContainers[GENERATIONS];
+	vector<Object*> classContainer;
 	Collector* myGarbageCollectors[GENERATIONS];
 	int stats[GENERATIONS];
+
+	int komaCounter;
+	int hotnessPreviousObjectID;
 
 };
 

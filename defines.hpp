@@ -12,6 +12,8 @@
 #define ROOTSET_SIZE    50
 #define VISUALIZE_GCS 	1
 
+#define CLASS_OBJECT    -1
+
 //DEBUGGING
 #define DEBUG_MODE            0
 #define WRITE_DETAILED_LOG    0
@@ -26,6 +28,10 @@
 #define PROMOTIONAGEFACTOR 0
 #define SHIFTING           1
 #define SHIFTINGFACTOR     2
+
+//FOR HOTNESS
+#define HOTNESS_DECAY        0     // not implemented yet :)
+#define HOTNESS_DECAY_FACTOR 0.2
 
 enum traversalEnum {
 					breadthFirst = 0,
@@ -54,11 +60,17 @@ enum gcReason {
 					reasonForced
 				};
 
+#define DEBUGMSG(msg) (fprintf(stderr, "%s:%d - %s\n", __FILE__, __LINE__, msg))
+
+#define DEBUGMSG_IFEQUAL(left, right, msg) if (left == right) DEBUGMSG(msg)
+
 // create some fancy strings for debug output
 #define TRAVERSAL_STRING (traversal == (int)breadthFirst ? "breadthFirst" : (traversal == (int)depthFirst ? "depthFirst" : "hotness"))
 #define COLLECTOR_STRING (collector == (int)traversalGC ? "traversal" : (collector == (int)markSweepGC ? "markSweep" : "copying"))
 #define ALLOCATOR_STRING (allocator == (int)simulatedAlloc ? "simulated" : "real")
 
 #define CREATE_GLOBAL_FILENAME(name) (globalFilename = (name).substr(0, (name).find(".trace")))
+
+#define CHECK_CLASS(object, string) (!strcmp(object->getClassName(), string))
 
 #endif

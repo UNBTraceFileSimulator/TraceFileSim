@@ -131,6 +131,7 @@ Object* ObjectContainer::getByID(int id) {
 		if (objectList.at(i) != NULL) {
 			int currentId = objectList.at(i)->getID();
 			if (id == currentId) {
+				objectList.at(i)->increaseHotness();
 				return objectList.at(i);
 			}
 		}
@@ -141,10 +142,12 @@ Object* ObjectContainer::getByID(int id) {
 }
 
 Object* ObjectContainer::getbySlotNr(int slot) {
+	//objectList.at(slot)->increaseHotness();
 	return objectList.at(slot);
 }
 
 Object* ObjectContainer::getRoot(int thread, int rootSlot) {
+	//rootset[thread][rootSlot]->increaseHotness();
 	return rootset[thread][rootSlot];
 }
 
@@ -206,6 +209,7 @@ Object* ObjectContainer::getGenRoot(int slot) {
 				gLineInTrace,slot);
 		exit(1);
 	}
+	remSet.at(slot)->increaseHotness();
 	return remSet.at(slot);
 }
 

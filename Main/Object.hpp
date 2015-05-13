@@ -8,6 +8,7 @@
 #ifndef OBJECT_HPP_
 #define OBJECT_HPP_
 
+#include "../defines.hpp"
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,6 +65,24 @@ public:
 		forwarded = value;
 	}
 
+	void increaseHotness() {
+		hotness++;
+	}
+
+	double getHotness() {
+		return hotness;
+	}
+
+	void decayHotness() {
+		if (HOTNESS_DECAY)
+			hotness *= (1 - HOTNESS_DECAY_FACTOR);
+	}
+
+	void addPointer(Object* object);
+
+	//marcel: needed for debugging my traversals, can be deleted if not needed
+	int komaID;
+
 private:
 	int 	myId;
 	int freed;
@@ -80,7 +99,7 @@ private:
 	size_t myAddress;
 
 	/*the list of objects I am pointing at*/
-	Object** pointers;
+	vector<Object*> pointers;
 
 	//garbage collector stuff
 	//TODO those two are basically the same. one could be removed
@@ -93,6 +112,8 @@ private:
 
     char *myName;
     bool forwarded;
+
+    double hotness;
 
 };
 

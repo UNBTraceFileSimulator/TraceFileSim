@@ -37,8 +37,6 @@ void RealAllocator::moveObject(Object *object) {
 	Object *temp;
 	int size = object->getPayloadSize();
 
-	//gcFree(object); // first we need to reclaim the old space
-
 	size_t address = (size_t)allocateInNewSpace(size);
 
 	if (address == (size_t)-1) {
@@ -49,9 +47,10 @@ void RealAllocator::moveObject(Object *object) {
 	temp = (Object*)address;
 
 	// now we move the object
-	//memcpy(&temp, &object, sizeof(*object)); // this doesn't work, need to fix later, can't figure out why right now
+	//memcpy(&temp, &object, sizeof(*object));
+	*temp = *object;
 	// we do a hack for now
-	temp->setArgs(object->getID(), object->getPayloadSize(), object->getPointersMax(), (char*)object->getClassName());
+	//temp->setArgs(object->getID(), object->getPayloadSize(), object->getPointersMax(), (char*)object->getClassName());
 	temp->setVisited(1);
 	object->setForwarded(true);
 
